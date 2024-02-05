@@ -12,8 +12,8 @@ services:
   logstash:
     image: logstash:8.12.0
     volumes:
-      - "D:/projetos pessoais/elastic-data-ingest/pipeline:/usr/share/logstash/pipeline/"
-      - "D:/projetos pessoais/elastic-data-ingest/driver:/usr/share/logstash/driver/"
+      - "./pipeline:/usr/share/logstash/pipeline/"
+      - "./driver:/usr/share/logstash/driver/"
     depends_on:
       - mysql
       - elasticsearch
