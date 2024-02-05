@@ -1,0 +1,39 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8
+    volumes:
+      - "C:/volume/mysql:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+
+  logstash:
+    image: logstash:8.12.0
+    volumes:
+      - "D:/projetos pessoais/elastic-data-ingest/pipeline:/usr/share/logstash/pipeline/"
+      - "D:/projetos pessoais/elastic-data-ingest/driver:/usr/share/logstash/driver/"
+    depends_on:
+      - mysql
+      - elasticsearch
+
+  elasticsearch:
+    image: elasticsearch:8.12.0
+    ports:
+      - "9200:9200"
+    environment:
+      - ELASTIC_PASSWORD=123456
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+
+  kibana:
+    image: kibana:8.12.0
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_PASSWORD=123456
+    depends_on:
+      - elasticsearch
